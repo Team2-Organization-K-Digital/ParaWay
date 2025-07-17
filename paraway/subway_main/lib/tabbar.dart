@@ -12,6 +12,8 @@ import 'package:subway_main/vm/tabbar_controller.dart';
 void main() => runApp(
   MultiProvider(
   providers: [
+    ChangeNotifierProvider(create: (context) => HandlerTemp()),
+      ChangeNotifierProvider(create: (context) => PredictHandler()),
     ChangeNotifierProvider(create: (context) => TabbarController()),
     ChangeNotifierProvider(
       create: (_) => PersonProgressProvider()
@@ -25,20 +27,7 @@ void main() => runApp(
   child: MyApp(),
 )
 
-    providers: [
-      ChangeNotifierProvider(create: (context) => HandlerTemp()),
-      ChangeNotifierProvider(create: (context) => PredictHandler()),
-      ChangeNotifierProvider(create: (context) => TabbarController()),
-      ChangeNotifierProvider(
-        create:
-            (_) =>
-                PersonProgressProvider()
-                  ..loadSvgPath()
-                  ..simulateProgress(),
-      ),
-    ],
-    child: MyApp(),
-  ),
+    
 );
 
 class MyApp extends StatelessWidget {
