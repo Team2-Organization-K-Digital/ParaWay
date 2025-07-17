@@ -1,10 +1,14 @@
 from fastapi import FastAPI
+from newsweather import router as newsweather_router
 from subway_confusion import router as subway_router
 
 ip = "127.0.0.1"
 
 app = FastAPI()
 app.include_router(subway_router,prefix="/subway",tags=["subway"])
+
+app.include_router(newsweather_router,prefix="/newsweather",tags=["newsweather"])
+
 
 if __name__ == "__main__":
     import uvicorn

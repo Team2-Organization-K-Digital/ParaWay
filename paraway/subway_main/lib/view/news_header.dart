@@ -148,6 +148,13 @@ class _HomePageState extends State<NewsHeader> {
                       final item = headlines[index];
                       return GestureDetector(
                         onTap: () {
+                          Navigator.push(context, 
+                          MaterialPageRoute(
+                          builder: (context) => NewsContentPage(
+                            title: item['title'] ?? "",
+                            content: item['content'] ?? "",
+                            )));
+
                           // Get.to(() => NewsContentPage(
                           //   title: item['title'] ?? "",
                           //   content: item['content'] ?? "",
