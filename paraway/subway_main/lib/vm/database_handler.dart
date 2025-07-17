@@ -82,7 +82,7 @@ class DatabaseHandler {
     int result = 0;
     final Database db = await initializeDB();
     result = await db.rawInsert(
-      'INSERT INTO user_favorite(sub_name, time)',
+      'INSERT INTO user_favorite(sub_name, time) VALUES (?, ?)',
       [favorite.name, favorite.time]
     );
     return result;

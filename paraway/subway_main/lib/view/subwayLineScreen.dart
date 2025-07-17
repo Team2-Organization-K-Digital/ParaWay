@@ -16,6 +16,7 @@ class SubwayLineScreen extends StatelessWidget {
     '잠실',
     '잠실나루',
   ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,10 @@ class SubwayLineScreen extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder:
                                                         (_) =>
-                                                            PersonProgressPage(), // 페이지 이동
+                                                            PersonProgressPage(
+                                                              stationName: stations[index]
+                                                            )
+                                                            , // 페이지 이동
                                                   ),
                                                 );
                                               },
