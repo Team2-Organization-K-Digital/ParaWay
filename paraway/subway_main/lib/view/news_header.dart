@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'news_content.dart';
@@ -26,10 +26,7 @@ class _HomePageState extends State<NewsHeader> {
       isLoading = true;
     });
     try {
-      await Future.wait([
-        fetchNews(),
-        fetchWeather(),
-      ]);
+      await Future.wait([fetchNews(), fetchWeather()]);
     } catch (e) {
       setState(() {
         error = "예외 발생: $e";
@@ -89,47 +86,48 @@ class _HomePageState extends State<NewsHeader> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("오늘의날씨", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            ...weathers.map((item) {
-  final text = item['title'] ?? "";
-  IconData icon;
+                  Text(
+                    "오늘의날씨",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  ...weathers.map((item) {
+                    final text = item['title'] ?? "";
+                    IconData icon;
 
-  if (text.contains("비")) {
-    icon = Icons.cloud;
-  } if (text.contains("눈")) {
-    icon = Icons.ac_unit;
-  } else {
-  } if (text.contains("흐림")) {
-    icon = Icons.cloud;
-  } 
-  // if (text.contains("")) {
-  //   icon = Icons.ac_unit;
-  // } 
-  else {
-    icon = Icons.wb_sunny;
-  }
+                    if (text.contains("비")) {
+                      icon = Icons.cloud;
+                    }
+                    if (text.contains("눈")) {
+                      icon = Icons.ac_unit;
+                    } else {}
+                    if (text.contains("흐림")) {
+                      icon = Icons.cloud;
+                    }
+                    // if (text.contains("")) {
+                    //   icon = Icons.ac_unit;
+                    // }
+                    else {
+                      icon = Icons.wb_sunny;
+                    }
 
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 4),
-    padding: EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: Colors.blue[50],
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Row(
-      children: [
-        Icon(icon, color: Colors.blue),
-        SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ],
-    ),
-  );
-}),
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(icon, color: Colors.blue),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(text, style: TextStyle(fontSize: 16)),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -140,7 +138,10 @@ class _HomePageState extends State<NewsHeader> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("뉴스 목록", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    "뉴스 목록",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -149,10 +150,10 @@ class _HomePageState extends State<NewsHeader> {
                       final item = headlines[index];
                       return GestureDetector(
                         onTap: () {
-                          Get.to(() => NewsContentPage(
-                            title: item['title'] ?? "",
-                            content: item['content'] ?? "",
-                          ));
+                          // Get.to(() => NewsContentPage(
+                          //   title: item['title'] ?? "",
+                          //   content: item['content'] ?? "",
+                          // ));
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(vertical: 6),

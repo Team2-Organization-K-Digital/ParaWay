@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:path_drawing/path_drawing.dart';
+import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math_64.dart' as vm;
 
 class PersonProgressPage extends StatefulWidget {
@@ -61,12 +62,15 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
 
   void _simulateProgress() {
     Future.delayed(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
       setState(() => _progress = 0.3);
     });
     Future.delayed(const Duration(milliseconds: 1500), () {
+      if (!mounted) return;
       setState(() => _progress = 0.7);
     });
     Future.delayed(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
       setState(() => _progress = 1.0);
     });
   }

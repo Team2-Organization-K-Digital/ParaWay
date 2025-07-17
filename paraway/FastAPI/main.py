@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+from subway_confusion import router as subway_router
 
 ip = "127.0.0.1"
 
 app = FastAPI()
+app.include_router(subway_router,prefix="/subway",tags=["subway"])
 
 if __name__ == "__main__":
     import uvicorn
