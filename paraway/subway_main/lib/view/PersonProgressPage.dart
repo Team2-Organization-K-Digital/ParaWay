@@ -17,6 +17,7 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
   double _progress = 0.0;
   Path? _svgShapePath;
   DateTime? selectedDateTime;
+  bool isHoliday = false;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
       ];
       final Matrix4 transformMatrix =
           Matrix4.identity()
-            ..translate(0.0, 600.0)
+            ..translate(0.0, 500.0)
             ..scale(0.5, -0.5); // 아이콘 크기
 
       for (final d in svgPathDs) {
@@ -76,31 +77,35 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
     });
   }
 
+  ////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('해당 역 혼잡도'),
-      actions: [
-        IconButton(
-                  onPressed: () {
-                    // 눌렀을때 즐겨찾기에 저장 - 시간이랑 해당 역
-                  }, 
-                  icon: Icon(Icons.star_border_outlined)
-        ) 
-      ],
-              ),
+      appBar: AppBar(
+        title: const Text('해당 역 혼잡도'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // 눌렀을때 즐겨찾기에 저장 - 시간이랑 해당 역
+              
+            },
+            icon: Icon(Icons.star_border_outlined,size: 30,),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
                 onPressed: () {
                   picker.DatePicker.showDateTimePicker(
                     context,
                     showTitleActions: true,
-                    minTime: DateTime(2025, 7, 1, 6, 0),
+                    minTime: DateTime.now(),
                     maxTime: DateTime(2025, 12, 31, 23, 0),
-                    currentTime: DateTime(2025, 7, 1, 6, 0),
+                    currentTime: DateTime.now(),
                     locale: picker.LocaleType.ko,
                     onConfirm: (dateTime) {
                       setState(() {
@@ -111,12 +116,25 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
                 },
                 child: Text("날짜 & 시간 선택"),
               ),
-              
-              // 공휴일 여부 체크박스
-              
+
+              Checkbox(
+                value: isHoliday,
+                onChanged: (bool? value) {
+                  setState(() {
+                    isHoliday = value ?? false;
+                  });
+                },
+              ),
+              Text('공휴일'),
+              ElevatedButton(
+                onPressed: () {
+                  //
+                }, 
+                child: Text('조회')
+              )
             ],
           ),
-          SizedBox(height: 30,),
+          SizedBox(height: 30),
           Column(
             children: [
               selectedDateTime != null
@@ -127,14 +145,14 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
                     style: TextStyle(fontSize: 16),
                   )
                   : Text('날짜와 시간을 선택해주세요.'),
-              SizedBox(height: 30,),
+              SizedBox(height: 30),
               Row(
                 children: [
                   Text('승차인원 : '),
-                  SizedBox(width: 20,),
-                  Text('하차인원 : ')
+                  SizedBox(width: 20),
+                  Text('하차인원 : '),
                 ],
-              )
+              ),
             ],
           ),
           // 혼잡도 사람 아이콘
