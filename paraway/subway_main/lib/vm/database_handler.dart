@@ -156,10 +156,10 @@ class DatabaseHandler {
   Future favoriteInsert(UserFavorite favorite) async {
     int result = 0;
     final Database db = await initializeDB();
-    result = await db.rawInsert('INSERT INTO user_favorite(sub_name, time)', [
-      favorite.name,
-      favorite.time,
-    ]);
+    result = await db.rawInsert(
+      'INSERT INTO user_favorite(sub_name, time) values(?,?)',
+      [favorite.name, favorite.time],
+    );
     return result;
   }
 

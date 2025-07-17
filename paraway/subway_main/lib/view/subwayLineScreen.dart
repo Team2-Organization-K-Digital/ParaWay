@@ -21,7 +21,6 @@ class SubwayLineScreen extends StatelessWidget {
     '잠실',
     '잠실나루',
   ];
-  
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +135,14 @@ class SubwayLineScreen extends StatelessWidget {
                                             ),
                                             SizedBox(width: 8),
                                             TextButton(
-                                              onPressed: () {
+                                              onPressed: () async {
+                                                context
+                                                    .read<
+                                                      PersonProgressProvider
+                                                    >()
+                                                    .setDateTime(
+                                                      DateTime.now(),
+                                                    );
                                                 Navigator.pop(
                                                   context,
                                                 ); // 다이얼로그 닫기
@@ -144,11 +150,12 @@ class SubwayLineScreen extends StatelessWidget {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder:
-                                                        (_) =>
-                                                            PersonProgressPage(
-                                                              stationName: stations[index]
-                                                            )
-                                                            , // 페이지 이동
+                                                        (
+                                                          _,
+                                                        ) => PersonProgressPage(
+                                                          stationName:
+                                                              stations[index],
+                                                        ), // 페이지 이동
                                                   ),
                                                 );
                                               },

@@ -17,14 +17,18 @@ class PersonProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<PersonProgressProvider>(context);
+    final pred = context.read<PredictHandler>().pred;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('$stationName역 혼잡도',style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text(
+          '$stationName역 혼잡도',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.star_border, size: 30,),
+            icon: Icon(Icons.star_border, size: 30),
             onPressed: () {
               showDialog(
                 context: context,
@@ -49,8 +53,9 @@ class PersonProgressPage extends StatelessWidget {
                             );
                             Navigator.pop(context); // 다이얼로그 닫기
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('즐겨찾기에 추가되었습니다'),
-                              duration: Duration(seconds: 1),
+                              SnackBar(
+                                content: Text('즐겨찾기에 추가되었습니다'),
+                                duration: Duration(seconds: 1),
                               ),
                             );
                           },
@@ -61,7 +66,7 @@ class PersonProgressPage extends StatelessWidget {
               );
             },
           ),
-          SizedBox(width: 5,)
+          SizedBox(width: 5),
         ],
       ),
       backgroundColor: Colors.white,
@@ -73,44 +78,57 @@ class PersonProgressPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-              Checkbox(
-                value: provider.isHoliday,
-                onChanged: (val) => provider.setHoliday(val ?? false),
-              ),
-              Text('공휴일'),
-              Checkbox(
-                value:  provider.up,
-                onChanged: (val) {provider.setUp(val ?? false); provider.simulateProgress();}
-              ),
-              Text('상선'),
-              Checkbox(
-                value: provider.out,
-                onChanged: (val) {provider.setOut(val ?? false);provider.simulateProgress();}
-              ),
-              Text('외선'),
-              ElevatedButton(
-                onPressed: () async{
-                  final info = Provider.of<HandlerTemp>(context, listen: false).info[0];
-                  final predict = Provider.of<PredictHandler>(context, listen: false);
-                  SubwayInfo feature = SubwayInfo(
-                    subNum: info.subNumber, 
-                    time: provider.selectedDateTime!.hour, 
-                    week: provider.selectedDateTime!.weekday, 
-                    stores: info.storeCount, 
-                    exits: info.subGate,
-                    workp: info.officeWorker, 
-                    holy: provider.isHoliday
-                  );
+                  Checkbox(
+                    value: provider.isHoliday,
+                    onChanged: (val) => provider.setHoliday(val ?? false),
+                  ),
+                  Text('공휴일'),
+                  Checkbox(
+                    value: provider.up,
+                    onChanged: (val) {
+                      provider.setUp(val ?? false);
+                      provider.simulateProgress();
+                    },
+                  ),
+                  Text('내선'),
+                  Checkbox(
+                    value: provider.out,
+                    onChanged: (val) {
+                      provider.setOut(val ?? false);
+                      provider.simulateProgress();
+                    },
+                  ),
+                  Text('외선'),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final info =
+                          Provider.of<HandlerTemp>(
+                            context,
+                            listen: false,
+                          ).info[0];
+                      final predict = Provider.of<PredictHandler>(
+                        context,
+                        listen: false,
+                      );
+                      SubwayInfo feature = SubwayInfo(
+                        subNum: info.subNumber,
+                        time: provider.selectedDateTime!.hour,
+                        week: provider.selectedDateTime!.weekday,
+                        stores: info.storeCount,
+                        exits: info.subGate,
+                        workp: info.officeWorker,
+                        holy: provider.isHoliday,
+                      );
 
-                  await context.read<PredictHandler>().loadconfusion(
-                            feature,
-                          );
-                  final pred = predict.pred;
-                  provider.setPredData(pred);
-                  provider.simulateProgress();
-                },
-                child: Text('조회'),
-              ),
+                      await context.read<PredictHandler>().loadconfusion(
+                        feature,
+                      );
+                      final pred = predict.pred;
+                      provider.setPredData(pred);
+                      provider.simulateProgress();
+                    },
+                    child: Text('조회'),
+                  ),
                 ],
               ),
               ElevatedButton(
@@ -131,7 +149,7 @@ class PersonProgressPage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 30, child: Text('5시 ~ 23시')),
           provider.selectedDateTime != null
               ? Text(
                 '선택된 날짜: ${provider.selectedDateTime!.year}-${provider.selectedDateTime!.month.toString().padLeft(2, '0')}-${provider.selectedDateTime!.day.toString().padLeft(2, '0')} '
@@ -141,7 +159,11 @@ class PersonProgressPage extends StatelessWidget {
               : Text('날짜와 시간을 선택해주세요.'),
           SizedBox(height: 30),
           Row(
-            children: [Text('승차인원 : ${provider.pred['on']}'), SizedBox(width: 20), Text('하차인원 : ${provider.pred['off']}')],
+            children: [
+              Text('승차인원 : ${pred['on']}'),
+              SizedBox(width: 20),
+              Text('하차인원 : ${pred['off']}'),
+            ],
           ),
           SizedBox(height: 30),
           Row(
@@ -154,22 +176,33 @@ class PersonProgressPage extends StatelessWidget {
                           width: 250,
                           height: 300,
                           child: LiquidCustomProgressIndicator(
-                            value: provider.progress,
+                            value: pred['oconfusion'],
                             direction: Axis.vertical,
                             backgroundColor: Colors.grey[200],
-                            valueColor: AlwaysStoppedAnimation(
-                              provider.progress <= 80
-                                  ? Colors.green
-                                  : provider.progress <= 120
-                                  ? Colors.amber
-                                  : Colors.red,
-                            ),
+                            valueColor:
+                                provider.out == true
+                                    ? AlwaysStoppedAnimation(
+                                      pred['fconfusion'] <= 80
+                                          ? Colors.green
+                                          : pred['fconfusion'] <= 120
+                                          ? Colors.amber
+                                          : Colors.red,
+                                    )
+                                    : AlwaysStoppedAnimation(
+                                      pred['oconfusion'] <= 80
+                                          ? Colors.green
+                                          : pred['oconfusion'] <= 120
+                                          ? Colors.amber
+                                          : Colors.red,
+                                    ),
                             shapePath: provider.svgShapePath!,
                             center: Text(
-                              "${(provider.progress).toDouble()}%",
+                              provider.out == true
+                                  ? "${(pred['fconfusion']).toDouble()}%"
+                                  : "${(pred['oconfusion']).toDouble()}%",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -178,12 +211,27 @@ class PersonProgressPage extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text('혼잡도', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-                  provider.out == true 
-                  ? Text('${provider.pred['fconfusion']}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
-                  : Text('${provider.pred['oconfusion']}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
+                  Text(
+                    provider.out == true ? '외선 혼잡도' : '내선 혼잡도',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  ),
+                  provider.out == true
+                      ? Text(
+                        '${pred['fconfusion']}%',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      )
+                      : Text(
+                        '${pred['oconfusion']}%',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      ),
                 ],
-              )
+              ),
             ],
           ),
         ],

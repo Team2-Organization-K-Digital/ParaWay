@@ -12,24 +12,22 @@ import 'package:subway_main/vm/tabbar_controller.dart';
 
 void main() => runApp(
   MultiProvider(
-  providers: [
-    ChangeNotifierProvider(create: (context) => HandlerTemp()),
+    providers: [
+      ChangeNotifierProvider(create: (context) => HandlerTemp()),
       ChangeNotifierProvider(create: (context) => PredictHandler()),
-    ChangeNotifierProvider(create: (context) => TabbarController()),
-    ChangeNotifierProvider(create: (_) => NewsHandler()..fetchAll()),
-    ChangeNotifierProvider(
-      create: (_) => PersonProgressProvider()
-        ..loadSvgPath()
-        ..simulateProgress(),
-    ),
-    ChangeNotifierProvider(
-      create: (_) => FavoriteProvider()
-    ),
-  ],
-  child: MyApp(),
-)
-
-    
+      ChangeNotifierProvider(create: (context) => TabbarController()),
+      ChangeNotifierProvider(create: (_) => NewsHandler()),
+      ChangeNotifierProvider(
+        create:
+            (_) =>
+                PersonProgressProvider()
+                  ..loadSvgPath()
+                  ..simulateProgress(),
+      ),
+      ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+    ],
+    child: MyApp(),
+  ),
 );
 
 class MyApp extends StatelessWidget {
@@ -56,6 +54,9 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
     super.initState();
     tabProvider = Provider.of<TabbarController>(context, listen: false);
     tabProvider.init(this, 3);
+    Future.microtask(() {
+      context.read<NewsHandler>().fetchAll(); // ✅ 빌드 이후 호출
+    });
   }
 
   @override
@@ -80,7 +81,7 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
             Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
             Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
           ],
-        
+
           labelColor: Colors.green,
           unselectedLabelColor: Colors.grey,
           indicatorColor: Colors.green,

@@ -5,13 +5,13 @@ import 'package:vector_math/vector_math_64.dart';
 class PersonProgressProvider with ChangeNotifier {
   double progress = 0.0;
   Path? svgShapePath;
-  DateTime? selectedDateTime;
+  DateTime selectedDateTime = DateTime.now();
   bool isHoliday = false;
   bool up = false;
-  bool out = false;
-  Map pred = {'on' : 0, 'off' : 0, 'oconfusion' : 0.00, 'fconfusion' : 0.00};
+  bool out = true;
+  Map pred = {'on': 0, 'off': 0, 'oconfusion': 0.00, 'fconfusion': 0.00};
 
-  void setPredData(dynamic data){
+  void setPredData(dynamic data) {
     pred = data;
     notifyListeners();
   }
@@ -28,19 +28,19 @@ class PersonProgressProvider with ChangeNotifier {
 
   void setUp(bool value) {
     up = value;
-    if(up == true){
+    if (up == true) {
       out = false;
     }
     notifyListeners();
   }
+
   void setOut(bool value) {
     out = value;
-    if(out == true){
+    if (out == true) {
       up = false;
     }
     notifyListeners();
   }
-
 
   void simulateProgress() {
     // Future.delayed(Duration(milliseconds: 500), () {
@@ -53,10 +53,8 @@ class PersonProgressProvider with ChangeNotifier {
     // });
     // Future.delayed(Duration(milliseconds: 1500), () {
     // });
-      out == true 
-      ? progress = pred['fconfusion']
-      : progress = pred['oconfusion'];
-      notifyListeners();
+    // out == true ? progress = pred['fconfusion'] : progress = pred['oconfusion'];
+    notifyListeners();
   }
 
   Future<void> loadSvgPath() async {
@@ -69,13 +67,18 @@ class PersonProgressProvider with ChangeNotifier {
         14 -97 6 -51 9 -58 28 -58 22 0 22 2 19 120 -3 99 -1 125 13 146 12 19 14 36
         9 71 -9 61 -32 83 -89 83 -31 0 -51 -6 -64 -19z""",
       ];
-      final Matrix4 transformMatrix = Matrix4.identity()
-        ..translate(0.0, 300.0)
-        ..scale(0.4, -0.4);
+      final Matrix4 transformMatrix =
+          Matrix4.identity()
+            ..translate(0.0, 300.0)
+            ..scale(0.4, -0.4);
 
       for (final d in svgPathDs) {
         final Path currentPath = parseSvgPathData(d);
-        finalPersonPath.addPath(currentPath, Offset.zero, matrix4: transformMatrix.storage);
+        finalPersonPath.addPath(
+          currentPath,
+          Offset.zero,
+          matrix4: transformMatrix.storage,
+        );
       }
 
       finalPersonPath.fillType = PathFillType.nonZero;
