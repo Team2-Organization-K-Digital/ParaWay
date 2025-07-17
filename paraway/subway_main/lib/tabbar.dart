@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:subway_main/screen/PersonProgressPage.dart';
-import 'package:subway_main/screen/gamseong/news_header.dart';
-import 'package:subway_main/screen/star.dart';
-import 'package:subway_main/screen/subwayLineScreen.dart';
+import 'package:subway_main/view/PersonProgressPage.dart';
+import 'package:subway_main/view/news_header.dart';
+import 'package:subway_main/view/star.dart';
+import 'package:subway_main/view/subwayLineScreen.dart';
 
 void main() => runApp(const MyApp());
 
