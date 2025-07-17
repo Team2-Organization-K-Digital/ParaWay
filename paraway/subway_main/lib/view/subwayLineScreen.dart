@@ -28,92 +28,94 @@ class SubwayLineScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return Stack(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 30),
-                    Column(
-                      children: [
-                        if (index != 0)
-                          Container(width: 4, height: 20, color: Colors.green),
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.green, width: 4),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(150,0,0,0),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 30),
+                      Column(
+                        children: [
+                          if (index != 0)
+                            Container(width: 4, height: 20, color: Colors.green),
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.green, width: 4),
+                            ),
                           ),
-                        ),
-                        if (index != stations.length - 1)
-                          Container(width: 4, height: 20, color: Colors.green),
-                      ],
-                    ),
-                    SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        stations[index],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                          if (index != stations.length - 1)
+                            Container(width: 4, height: 20, color: Colors.green),
+                        ],
+                      ),
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          stations[index],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 16),
-                                      Text("혼잡"),
-                                      SizedBox(height: 24),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          TextButton(
-                                            onPressed:
-                                                () => Navigator.pop(context),
-                                            child: Text("닫기"),
-                                          ),
-                                          SizedBox(width: 8),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(
-                                                context,
-                                              ); // 다이얼로그 닫기
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (_) =>
-                                                          PersonProgressPage(), // 페이지 이동
-                                                ),
-                                              );
-                                            },
-                                            child: Text("상세보기"),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                        SizedBox(height: 16),
+                                        Text("혼잡"),
+                                        SizedBox(height: 24),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(context),
+                                              child: Text("닫기"),
+                                            ),
+                                            SizedBox(width: 8),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                  context,
+                                                ); // 다이얼로그 닫기
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (_) =>
+                                                            PersonProgressPage(), // 페이지 이동
+                                                  ),
+                                                );
+                                              },
+                                              child: Text("상세보기"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                        );
-                      },
-                      child: Text(
-                        stations[index],
-                        style: TextStyle(fontSize: 18),
+                          );
+                        },
+                        child: Text(
+                          stations[index],
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             );

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:subway_main/view/PersonProgressPage.dart';
 import 'package:subway_main/view/news_header.dart';
 import 'package:subway_main/view/star.dart';
 import 'package:subway_main/view/subwayLineScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:subway_main/vm/PersonProgressProvider.dart';
 import 'package:subway_main/vm/tabbar_controller.dart';
 
 void main() => runApp(
   MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => TabbarController()),
-    ],
-    child: MyApp(),
-  ),
+  providers: [
+    ChangeNotifierProvider(create: (context) => TabbarController()),
+    ChangeNotifierProvider(
+      create: (_) => PersonProgressProvider()
+        ..loadSvgPath()
+        ..simulateProgress(),
+    ),
+  ],
+  child: MyApp(),
+)
+
 );
 
 class MyApp extends StatelessWidget {
@@ -64,9 +70,9 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
           Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
         ],
 
-        labelColor: Colors.deepPurple,
+        labelColor: Colors.green,
         unselectedLabelColor: Colors.grey,
-        indicatorColor: Colors.deepPurple,
+        indicatorColor: Colors.green,
       ),
     );
   }
