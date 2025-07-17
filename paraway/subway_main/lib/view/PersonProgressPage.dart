@@ -64,9 +64,35 @@ class PersonProgressPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+              Checkbox(
+                value: provider.isHoliday,
+                onChanged: (val) => provider.setHoliday(val ?? false),
+              ),
+              Text('공휴일'),
+              Checkbox(
+                value: provider.up,
+                onChanged: (val) => provider.setUpOut(val ?? false),
+              ),
+              Text('상선'),
+              Checkbox(
+                value: provider.out,
+                onChanged: (val) => provider.setUpOut(val ?? false),
+              ),
+              Text('외선'),
+              ElevatedButton(
+                onPressed: () {
+                  //
+                },
+                child: Text('조회'),
+              ),
+                ],
+              ),
               ElevatedButton(
                 onPressed: () {
                   picker.DatePicker.showDateTimePicker(
@@ -82,17 +108,6 @@ class PersonProgressPage extends StatelessWidget {
                   );
                 },
                 child: Text("날짜 & 시간 선택"),
-              ),
-              Checkbox(
-                value: provider.isHoliday,
-                onChanged: (val) => provider.setHoliday(val ?? false),
-              ),
-              Text('공휴일'),
-              ElevatedButton(
-                onPressed: () {
-                  //
-                },
-                child: Text('조회'),
               ),
             ],
           ),
@@ -123,15 +138,15 @@ class PersonProgressPage extends StatelessWidget {
                             direction: Axis.vertical,
                             backgroundColor: Colors.grey[200],
                             valueColor: AlwaysStoppedAnimation(
-                              provider.progress < 0.3
+                              provider.progress <= 80
                                   ? Colors.green
-                                  : provider.progress < 0.7
-                                  ? Colors.yellow
+                                  : provider.progress <= 120
+                                  ? Colors.amber
                                   : Colors.red,
                             ),
                             shapePath: provider.svgShapePath!,
                             center: Text(
-                              "${(provider.progress * 100).toDouble()}%",
+                              "${(provider.progress).toDouble()}%",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -144,7 +159,7 @@ class PersonProgressPage extends StatelessWidget {
               Column(
                 children: [
                   Text('혼잡도', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-                  Text('60.0%', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20))
+                  Text('${provider.progress}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
                 ],
               )
             ],

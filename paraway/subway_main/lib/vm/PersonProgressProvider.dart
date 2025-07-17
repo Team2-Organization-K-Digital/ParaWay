@@ -7,6 +7,8 @@ class PersonProgressProvider with ChangeNotifier {
   Path? svgShapePath;
   DateTime? selectedDateTime;
   bool isHoliday = false;
+  bool up = false;
+  bool out = false;
 
   void setDateTime(DateTime date) {
     selectedDateTime = date;
@@ -15,6 +17,12 @@ class PersonProgressProvider with ChangeNotifier {
 
   void setHoliday(bool value) {
     isHoliday = value;
+    notifyListeners();
+  }
+
+  void setUpOut(bool value) {
+    up = value;
+    out = value;
     notifyListeners();
   }
 
@@ -27,8 +35,8 @@ class PersonProgressProvider with ChangeNotifier {
     //   progress = 0.7;
     //   notifyListeners();
     // });
-    Future.delayed(Duration(milliseconds: 2500), () {
-      progress = 0.6;
+    Future.delayed(Duration(milliseconds: 1500), () {
+      progress = 81;
       notifyListeners();
     });
   }
