@@ -3,9 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
+import 'package:subway_main/model/subway_info.dart';
 import 'package:subway_main/model/user_favorite.dart';
 import 'package:subway_main/vm/PersonProgressProvider.dart';
 import 'package:subway_main/vm/favoriteProvider.dart';
+import 'package:subway_main/vm/handler_temp.dart';
+import 'package:subway_main/vm/predict_handler.dart';
 
 class PersonProgressPage extends StatelessWidget {
   final String stationName;
@@ -76,18 +79,35 @@ class PersonProgressPage extends StatelessWidget {
               ),
               Text('공휴일'),
               Checkbox(
-                value: provider.up,
-                onChanged: (val) => provider.setUpOut(val ?? false),
+                value:  provider.up,
+                onChanged: (val) {provider.setUp(val ?? false); provider.simulateProgress();}
               ),
               Text('상선'),
               Checkbox(
                 value: provider.out,
-                onChanged: (val) => provider.setUpOut(val ?? false),
+                onChanged: (val) {provider.setOut(val ?? false);provider.simulateProgress();}
               ),
               Text('외선'),
               ElevatedButton(
-                onPressed: () {
-                  //
+                onPressed: () async{
+                  final info = Provider.of<HandlerTemp>(context, listen: false).info[0];
+                  final predict = Provider.of<PredictHandler>(context, listen: false);
+                  SubwayInfo feature = SubwayInfo(
+                    subNum: info.subNumber, 
+                    time: provider.selectedDateTime!.hour, 
+                    week: provider.selectedDateTime!.weekday, 
+                    stores: info.storeCount, 
+                    exits: info.subGate,
+                    workp: info.officeWorker, 
+                    holy: provider.isHoliday
+                  );
+
+                  await context.read<PredictHandler>().loadconfusion(
+                            feature,
+                          );
+                  final pred = predict.pred;
+                  provider.setPredData(pred);
+                  provider.simulateProgress();
                 },
                 child: Text('조회'),
               ),
@@ -121,7 +141,7 @@ class PersonProgressPage extends StatelessWidget {
               : Text('날짜와 시간을 선택해주세요.'),
           SizedBox(height: 30),
           Row(
-            children: [Text('승차인원 : '), SizedBox(width: 20), Text('하차인원 : ')],
+            children: [Text('승차인원 : ${provider.pred['on']}'), SizedBox(width: 20), Text('하차인원 : ${provider.pred['off']}')],
           ),
           SizedBox(height: 30),
           Row(
@@ -159,7 +179,9 @@ class PersonProgressPage extends StatelessWidget {
               Column(
                 children: [
                   Text('혼잡도', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-                  Text('${provider.progress}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
+                  provider.out == true 
+                  ? Text('${provider.pred['fconfusion']}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
+                  : Text('${provider.pred['oconfusion']}%', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
                 ],
               )
             ],

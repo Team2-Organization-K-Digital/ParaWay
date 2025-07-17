@@ -9,6 +9,12 @@ class PersonProgressProvider with ChangeNotifier {
   bool isHoliday = false;
   bool up = false;
   bool out = false;
+  Map pred = {'on' : 0, 'off' : 0, 'oconfusion' : 0.00, 'fconfusion' : 0.00};
+
+  void setPredData(dynamic data){
+    pred = data;
+    notifyListeners();
+  }
 
   void setDateTime(DateTime date) {
     selectedDateTime = date;
@@ -20,11 +26,21 @@ class PersonProgressProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUpOut(bool value) {
+  void setUp(bool value) {
     up = value;
-    out = value;
+    if(up == true){
+      out = false;
+    }
     notifyListeners();
   }
+  void setOut(bool value) {
+    out = value;
+    if(out == true){
+      up = false;
+    }
+    notifyListeners();
+  }
+
 
   void simulateProgress() {
     // Future.delayed(Duration(milliseconds: 500), () {
@@ -35,10 +51,12 @@ class PersonProgressProvider with ChangeNotifier {
     //   progress = 0.7;
     //   notifyListeners();
     // });
-    Future.delayed(Duration(milliseconds: 1500), () {
-      progress = 81;
+    // Future.delayed(Duration(milliseconds: 1500), () {
+    // });
+      out == true 
+      ? progress = pred['fconfusion']
+      : progress = pred['oconfusion'];
       notifyListeners();
-    });
   }
 
   Future<void> loadSvgPath() async {

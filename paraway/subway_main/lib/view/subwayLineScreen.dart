@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:subway_main/model/subway_info.dart';
 import 'package:subway_main/view/PersonProgressPage.dart';
+import 'package:subway_main/vm/PersonProgressProvider.dart';
 import 'package:subway_main/vm/handler_temp.dart';
 import 'package:subway_main/vm/predict_handler.dart';
 
@@ -26,7 +27,6 @@ class SubwayLineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<HandlerTemp>();
     final predict = context.watch<PredictHandler>();
-
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.white),
       backgroundColor: Colors.white,
