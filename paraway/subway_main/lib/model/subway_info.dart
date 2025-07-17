@@ -5,7 +5,7 @@ class SubwayInfo {
   final int stores;   // 점포 수
   final int exits;    // 출구 수
   final int workp;    // 직장인 수
-  final int holy;     // 공휴일 판별
+  final bool holy;     // 공휴일 판별
 
   SubwayInfo(
     {
