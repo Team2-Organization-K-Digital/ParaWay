@@ -31,7 +31,6 @@ class Tabbar extends StatelessWidget {
             SubwayLineScreen(),
             Star(),
             PersonProgressPage(),
-            NewsHeader(),
           ],
         ),
         bottomNavigationBar: TabBar(
@@ -39,7 +38,6 @@ class Tabbar extends StatelessWidget {
             Tab(icon: Icon(Icons.home), text: "홈"),
             Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
             Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
-            Tab(icon: Icon(Icons.newspaper), text: "뉴스페이지"),
           ],
           labelColor: Colors.deepPurple,
           unselectedLabelColor: Colors.grey,
