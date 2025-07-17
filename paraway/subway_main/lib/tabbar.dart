@@ -4,12 +4,14 @@ import 'package:subway_main/view/star.dart';
 import 'package:subway_main/view/subwayLineScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:subway_main/vm/PersonProgressProvider.dart';
+import 'package:subway_main/vm/news_handler.dart';
 import 'package:subway_main/vm/tabbar_controller.dart';
 
 void main() => runApp(
   MultiProvider(
   providers: [
     ChangeNotifierProvider(create: (context) => TabbarController()),
+    ChangeNotifierProvider(create: (_) => NewsHandler()..fetchAll()),
     ChangeNotifierProvider(
       create: (_) => PersonProgressProvider()
         ..loadSvgPath()
