@@ -1,9 +1,9 @@
-// person_progress_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:path_drawing/path_drawing.dart';
 import 'package:vector_math/vector_math_64.dart' as vm;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 
 class PersonProgressPage extends StatefulWidget {
   const PersonProgressPage({super.key});
@@ -12,9 +12,11 @@ class PersonProgressPage extends StatefulWidget {
   State<PersonProgressPage> createState() => _PersonProgressPageState();
 }
 
+// Liquid Custom Progressor
 class _PersonProgressPageState extends State<PersonProgressPage> {
   double _progress = 0.0;
   Path? _svgShapePath;
+  DateTime? selectedDateTime;
 
   @override
   void initState() {
@@ -36,7 +38,7 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
       final Matrix4 transformMatrix =
           Matrix4.identity()
             ..translate(0.0, 600.0)
-            ..scale(0.5, -0.5);
+            ..scale(0.5, -0.5); // 아이콘 크기
 
       for (final d in svgPathDs) {
         final Path currentPath = parseSvgPathData(d);
@@ -61,43 +63,104 @@ class _PersonProgressPageState extends State<PersonProgressPage> {
 
   void _simulateProgress() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() => _progress = 0.3);
+      setState(() => _progress = 0.3); // 30퍼
     });
     Future.delayed(const Duration(milliseconds: 1500), () {
-      setState(() => _progress = 0.7);
+      setState(() => _progress = 0.7); // 70퍼
     });
     Future.delayed(const Duration(milliseconds: 2500), () {
-      setState(() => _progress = 1.0);
+      setState(() => _progress = 1.0); // 100퍼
     });
   }
+  /////////////////////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('사람 모양 진행률')),
-      body: Center(
-        child:
-            _svgShapePath == null
-                ? const CircularProgressIndicator()
-                : SizedBox(
-                  width: 300,
-                  height: 600,
-                  child: LiquidCustomProgressIndicator(
-                    value: _progress,
-                    direction: Axis.vertical,
-                    backgroundColor: Colors.grey[200],
-                    valueColor: const AlwaysStoppedAnimation(Colors.blue),
-                    shapePath: _svgShapePath!,
-                    center: Text(
-                      "${(_progress * 100).toInt()}%",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+      appBar: AppBar(title: const Text('해당 역 혼잡도'),
+      actions: [
+        IconButton(
+                  onPressed: () {
+                    // 눌렀을때 즐겨찾기에 저장 - 시간이랑 해당 역
+                  }, 
+                  icon: Icon(Icons.star_border_outlined)
+        ) 
+      ],
+              ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  picker.DatePicker.showDateTimePicker(
+                    context,
+                    showTitleActions: true,
+                    minTime: DateTime(2025, 7, 1, 6, 0),
+                    maxTime: DateTime(2025, 12, 31, 23, 0),
+                    currentTime: DateTime(2025, 7, 1, 6, 0),
+                    locale: picker.LocaleType.ko,
+                    onConfirm: (dateTime) {
+                      setState(() {
+                        selectedDateTime = dateTime;
+                      });
+                    },
+                  );
+                },
+                child: Text("날짜 & 시간 선택"),
+              ),
+              
+              // 공휴일 여부 체크박스
+              
+            ],
+          ),
+          SizedBox(height: 30,),
+          Column(
+            children: [
+              selectedDateTime != null
+                  ? Text(
+                    '선택된 날짜: '
+                    '${selectedDateTime!.year}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.day.toString().padLeft(2, '0')} '
+                    '${selectedDateTime!.hour.toString().padLeft(2, '0')}:${selectedDateTime!.minute.toString().padLeft(2, '0')}',
+                    style: TextStyle(fontSize: 16),
+                  )
+                  : Text('날짜와 시간을 선택해주세요.'),
+              SizedBox(height: 30,),
+              Row(
+                children: [
+                  Text('승차인원 : '),
+                  SizedBox(width: 20,),
+                  Text('하차인원 : ')
+                ],
+              )
+            ],
+          ),
+          // 혼잡도 사람 아이콘
+          Center(
+            child:
+                _svgShapePath == null
+                    ? const CircularProgressIndicator()
+                    : SizedBox(
+                      width: 700,
+                      height: 600,
+                      child: LiquidCustomProgressIndicator(
+                        value: _progress,
+                        direction: Axis.vertical,
+                        backgroundColor: Colors.grey[200],
+                        valueColor: const AlwaysStoppedAnimation(Colors.red),
+                        shapePath: _svgShapePath!,
+                        center: Text(
+                          "${(_progress * 100).toInt()}%",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+          ),
+        ],
       ),
     );
   }
