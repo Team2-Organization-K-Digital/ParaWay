@@ -1,9 +1,9 @@
 class SubInfo {
-  final String subName;
-  final int subNumber;
-  final int storeCount;
-  final int subGate;
-  final int officeWorker;
+  final String subName;    // 지하철 역 명
+  final int subNumber;     // 지하철 역 번호
+  final int storeCount;    // 점포 수
+  final int subGate;       // 출구 수
+  final int officeWorker;  // 직장인 수
 
   SubInfo(
     {

@@ -12,12 +12,12 @@ import 'package:subway_main/model/user_favorite.dart';
   - Created Date  : 2025.07.17
   - Last Modified : 2025.07.17
   - package       : path, sqflite
-
 // --------------------------------------------------------------------- //
   [Changelog]
   - 2025.07.17 v1.0.0  : ParaWay.db 생성 및 테이블 생성
   -                      user_favorite table 의 query, insert, drop 함수 작성
   -                      sub_info table 의 query 함수 작성
+  -                      초기 데이터 삽입 여부를 판별하여 초기 데이터를 삽입하는 함수 작성
 // --------------------------------------------------------------------- //
 */
 class DatabaseHandler {

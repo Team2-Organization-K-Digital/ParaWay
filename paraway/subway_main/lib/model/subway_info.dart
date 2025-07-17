@@ -1,1 +1,21 @@
-class SubwayInfo {}
+class SubwayInfo {
+  final int subNum;   // 지하철 역 번호
+  final int time;     // 시간
+  final int week;     // 요일
+  final int stores;   // 점포 수
+  final int exits;    // 출구 수
+  final int workp;    // 직장인 수
+  final int holy;     // 공휴일 판별
+
+  SubwayInfo(
+    {
+      required this.subNum,
+      required this.time,
+      required this.week,
+      required this.stores,
+      required this.exits,
+      required this.workp,
+      required this.holy
+    }
+  );
+}
