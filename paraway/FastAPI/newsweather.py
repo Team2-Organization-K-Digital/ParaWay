@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import pymysql
 from selenium import webdriver
@@ -8,8 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 
-
-router = FastAPI()
+router = APIRouter()
 # CORS 설정 (Flutter에서 접속 가능하게)
 
 
@@ -101,10 +100,6 @@ def get_news():
 
     return {"results": weathers}
 
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(router, host="127.0.0.1", port=8000)
 
     
 
