@@ -42,8 +42,17 @@ dependencies:
   # SVG
   flutter_svg: ^1.1.2
 
-  # Getx
-  get: ^4.7.2
+  # SQlite
+  sqlite: ^0.4.2
+
+  # Provider
+  provider: ^6.1.5
+
+  # Path
+  path: ^1.9.1
+
+  # Webview_flutter
+  webview_flutter: ^4.13.0
 
 dev_dependencies:
   flutter_test:
