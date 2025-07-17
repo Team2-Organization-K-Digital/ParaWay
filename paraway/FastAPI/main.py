@@ -6,7 +6,6 @@ ip = "127.0.0.1"
 
 app = FastAPI()
 app.include_router(subway_router,prefix="/subway",tags=["subway"])
-
 app.include_router(newsweather_router,prefix="/newsweather",tags=["newsweather"])
 
 
