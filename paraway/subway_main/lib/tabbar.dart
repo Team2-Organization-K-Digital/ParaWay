@@ -3,46 +3,68 @@ import 'package:subway_main/view/PersonProgressPage.dart';
 import 'package:subway_main/view/news_header.dart';
 import 'package:subway_main/view/star.dart';
 import 'package:subway_main/view/subwayLineScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:subway_main/vm/tabbar_controller.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => TabbarController()),
+    ],
+    child: MyApp(),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Tabbar(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(home: Tabbar(), debugShowCheckedModeBanner: false);
   }
 }
 
-class Tabbar extends StatelessWidget {
-  const Tabbar({super.key});
+class Tabbar extends StatefulWidget {
+  Tabbar({super.key});
+
+  @override
+  State<Tabbar> createState() => _TabbarState();
+}
+
+class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
+  late TabbarController tabProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    tabProvider = Provider.of<TabbarController>(context, listen: false);
+    tabProvider.init(this, 3);
+  }
+
+  @override
+  void dispose() {
+    tabProvider.disposeController();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4, // 탭 개수
-      child: Scaffold(
-        body: TabBarView(
-          children: [
-            SubwayLineScreen(),
-            Star(),
-            PersonProgressPage(),
-          ],
-        ),
-        bottomNavigationBar: TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.home), text: "홈"),
-            Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
-            Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
-          ],
-          labelColor: Colors.deepPurple,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: Colors.deepPurple,
-        ),
+    return Scaffold(
+      body: TabBarView(
+        controller: tabProvider.tabController,
+        children: [SubwayLineScreen(), Star(), PersonProgressPage()],
+      ),
+      bottomNavigationBar: TabBar(
+        controller: tabProvider.tabController,
+        tabs: [
+          Tab(icon: Icon(Icons.home), text: "홈"),
+          Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
+          Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
+        ],
+
+        labelColor: Colors.deepPurple,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: Colors.deepPurple,
       ),
     );
   }
