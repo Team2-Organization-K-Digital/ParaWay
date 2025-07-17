@@ -52,7 +52,9 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: tabProvider.tabController,
-        children: [SubwayLineScreen(), Star(), NewsHeader()],
+        children: [
+          SubwayLineScreen(), 
+          Star(), NewsHeader()],
       ),
       bottomNavigationBar: TabBar(
         controller: tabProvider.tabController,

@@ -41,7 +41,7 @@ class _HomePageState extends State<NewsHeader> {
   }
 
   Future<void> fetchNews() async {
-    final url = Uri.parse("http://127.0.0.1:8000/newscontent");
+    final url = Uri.parse("http://127.0.0.1:8000/newsweather/newscontent");
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -52,7 +52,7 @@ class _HomePageState extends State<NewsHeader> {
   }
 
   Future<void> fetchWeather() async {
-    final url = Uri.parse("http://127.0.0.1:8000/weather");
+    final url = Uri.parse("http://127.0.0.1:8000/newsweather/weather");
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

@@ -66,7 +66,7 @@ def get_newscontent():
         content = content_elem.text.strip()
 
         # 결과에 추가
-        results.routerend({
+        results.append({
             "title": title,
             "content": content
         })
