@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
+import 'package:subway_main/model/user_favorite.dart';
 import 'package:subway_main/vm/PersonProgressProvider.dart';
+import 'package:subway_main/vm/favoriteProvider.dart';
 
 class PersonProgressPage extends StatelessWidget {
-  const PersonProgressPage({super.key});
+  final String stationName;
+  const PersonProgressPage({super.key, required this.stationName});
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +17,51 @@ class PersonProgressPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('해당 역 혼잡도'),
+        backgroundColor: Colors.white,
+        title: Text('$stationName역 혼잡도',style: TextStyle(fontWeight: FontWeight.bold),),
         actions: [
           IconButton(
+            icon: Icon(Icons.star_border, size: 30,),
             onPressed: () {
-              // 즐겨찾기 저장하기
+              showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text('즐겨찾기 추가'),
+                      content: Text('$stationName역을 즐겨찾기에 추가하시겠습니까?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context), // 취소
+                          child: Text('아니요'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            final favorite = UserFavorite(
+                              name: stationName,
+                              time:
+                                  "${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}",
+                            );
+                            context.read<FavoriteProvider>().addFavorite(
+                              favorite,
+                            );
+                            Navigator.pop(context); // 다이얼로그 닫기
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('즐겨찾기에 추가되었습니다'),
+                              duration: Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: Text('예'),
+                        ),
+                      ],
+                    ),
+              );
             },
-            icon: Icon(Icons.star_border_outlined, size: 30),
           ),
+          SizedBox(width: 5,)
         ],
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Row(
@@ -60,42 +99,55 @@ class PersonProgressPage extends StatelessWidget {
           SizedBox(height: 30),
           provider.selectedDateTime != null
               ? Text(
-                  '선택된 날짜: ${provider.selectedDateTime!.year}-${provider.selectedDateTime!.month.toString().padLeft(2, '0')}-${provider.selectedDateTime!.day.toString().padLeft(2, '0')} '
-                  '${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}',
-                  style: TextStyle(fontSize: 16),
-                )
+                '선택된 날짜: ${provider.selectedDateTime!.year}-${provider.selectedDateTime!.month.toString().padLeft(2, '0')}-${provider.selectedDateTime!.day.toString().padLeft(2, '0')} '
+                '${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}',
+                style: TextStyle(fontSize: 16),
+              )
               : Text('날짜와 시간을 선택해주세요.'),
           SizedBox(height: 30),
           Row(
-            children: [
-              Text('승차인원 : '),
-              SizedBox(width: 20),
-              Text('하차인원 : ')
-            ],
+            children: [Text('승차인원 : '), SizedBox(width: 20), Text('하차인원 : ')],
           ),
           SizedBox(height: 30),
-          Center(
-            child: provider.svgShapePath == null
-                ? CircularProgressIndicator()
-                : SizedBox(
-                    width: 400,
-                    height: 400,
-                    child: LiquidCustomProgressIndicator(
-                      value: provider.progress,
-                      direction: Axis.vertical,
-                      backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation(Colors.red),
-                      shapePath: provider.svgShapePath!,
-                      center: Text(
-                        "${(provider.progress * 100).toInt()}%",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              Center(
+                child:
+                    provider.svgShapePath == null
+                        ? CircularProgressIndicator()
+                        : SizedBox(
+                          width: 250,
+                          height: 300,
+                          child: LiquidCustomProgressIndicator(
+                            value: provider.progress,
+                            direction: Axis.vertical,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: AlwaysStoppedAnimation(
+                              provider.progress < 0.3
+                                  ? Colors.green
+                                  : provider.progress < 0.7
+                                  ? Colors.yellow
+                                  : Colors.red,
+                            ),
+                            shapePath: provider.svgShapePath!,
+                            center: Text(
+                              "${(provider.progress * 100).toDouble()}%",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+              ),
+              Column(
+                children: [
+                  Text('혼잡도', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                  Text('60.0%', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20))
+                ],
+              )
+            ],
           ),
         ],
       ),

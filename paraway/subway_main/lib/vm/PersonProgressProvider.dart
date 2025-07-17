@@ -19,16 +19,16 @@ class PersonProgressProvider with ChangeNotifier {
   }
 
   void simulateProgress() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      progress = 0.3;
-      notifyListeners();
-    });
-    Future.delayed(Duration(milliseconds: 1500), () {
-      progress = 0.7;
-      notifyListeners();
-    });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   progress = 0.3;
+    //   notifyListeners();
+    // });
+    // Future.delayed(Duration(milliseconds: 1500), () {
+    //   progress = 0.7;
+    //   notifyListeners();
+    // });
     Future.delayed(Duration(milliseconds: 2500), () {
-      progress = 1.0;
+      progress = 0.6;
       notifyListeners();
     });
   }

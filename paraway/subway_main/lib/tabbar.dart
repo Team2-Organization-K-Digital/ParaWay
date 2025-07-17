@@ -4,12 +4,27 @@ import 'package:subway_main/view/star.dart';
 import 'package:subway_main/view/subwayLineScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:subway_main/vm/PersonProgressProvider.dart';
+import 'package:subway_main/vm/favoriteProvider.dart';
 import 'package:subway_main/vm/handler_temp.dart';
 import 'package:subway_main/vm/predict_handler.dart';
 import 'package:subway_main/vm/tabbar_controller.dart';
 
 void main() => runApp(
   MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (context) => TabbarController()),
+    ChangeNotifierProvider(
+      create: (_) => PersonProgressProvider()
+        ..loadSvgPath()
+        ..simulateProgress(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => FavoriteProvider()
+    ),
+  ],
+  child: MyApp(),
+)
+
     providers: [
       ChangeNotifierProvider(create: (context) => HandlerTemp()),
       ChangeNotifierProvider(create: (context) => PredictHandler()),
@@ -65,17 +80,20 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
         controller: tabProvider.tabController,
         children: [SubwayLineScreen(), Star(), NewsHeader()],
       ),
-      bottomNavigationBar: TabBar(
-        controller: tabProvider.tabController,
-        tabs: [
-          Tab(icon: Icon(Icons.home), text: "홈"),
-          Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
-          Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
-        ],
-
-        labelColor: Colors.green,
-        unselectedLabelColor: Colors.grey,
-        indicatorColor: Colors.green,
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: TabBar(
+          controller: tabProvider.tabController,
+          tabs: [
+            Tab(icon: Icon(Icons.home), text: "홈"),
+            Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
+            Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
+          ],
+        
+          labelColor: Colors.green,
+          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colors.green,
+        ),
       ),
     );
   }
