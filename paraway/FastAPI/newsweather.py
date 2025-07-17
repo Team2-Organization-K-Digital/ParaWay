@@ -7,21 +7,13 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
-app = FastAPI()
 
+
+router = FastAPI()
 # CORS 설정 (Flutter에서 접속 가능하게)
 
-def connect():
-    return pymysql.connect(
-        host="127.0.0.1",
-        user="root",
-        password="qwer1234",
-        db="your_db",
-        charset="utf8mb4",
-        cursorclass=pymysql.cursors.DictCursor
-    )
 
-@app.get("/news")
+@router.get("/news")
 def get_news():
     titles = []
     contents = []
@@ -46,7 +38,7 @@ def get_news():
     return {"results": headlines}
 
 
-@app.get("/newscontent")
+@router.get("/newscontent")
 def get_newscontent():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
@@ -75,7 +67,7 @@ def get_newscontent():
         content = content_elem.text.strip()
 
         # 결과에 추가
-        results.append({
+        results.routerend({
             "title": title,
             "content": content
         })
@@ -87,7 +79,7 @@ def get_newscontent():
     driver.quit()
     return {"results": results}
 
-@app.get("/weather")
+@router.get("/weather")
 def get_news():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")  # 창 안 띄우기
@@ -112,6 +104,10 @@ def get_news():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(router, host="127.0.0.1", port=8000)
 
     
+
+    #   cd /Users/gamseong/ParaWay/paraway/FastAPI
+    #       source venv/bin/activate
+    #       python main.py
