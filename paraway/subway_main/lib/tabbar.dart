@@ -15,6 +15,7 @@ void main() => runApp(
     ChangeNotifierProvider(create: (context) => HandlerTemp()),
       ChangeNotifierProvider(create: (context) => PredictHandler()),
     ChangeNotifierProvider(create: (context) => TabbarController()),
+    ChangeNotifierProvider(create: (_) => NewsHandler()..fetchAll()),
     ChangeNotifierProvider(
       create: (_) => PersonProgressProvider()
         ..loadSvgPath()

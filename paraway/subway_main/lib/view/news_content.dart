@@ -43,8 +43,8 @@ class NewsContentPage extends StatelessWidget {
                 ),
               ),
             ),
-            LinkPreview(  onLinkPreviewDataFetched: (_) {},
-              text: content)
+            LinkPreview(  onLinkPreviewDataFetched: (_) {}, // onlink..는필수 무슨기능인지는모름
+              text: content) // 여기 
           ],
         
         ),
