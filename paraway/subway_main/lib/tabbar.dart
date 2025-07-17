@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:subway_main/screen/PersonProgressPage.dart';
-import 'package:subway_main/screen/gamseong/news_header.dart';
-import 'package:subway_main/screen/star.dart';
-import 'package:subway_main/screen/subwayLineScreen.dart';
+import 'package:subway_main/view/PersonProgressPage.dart';
+import 'package:subway_main/view/news_header.dart';
+import 'package:subway_main/view/star.dart';
+import 'package:subway_main/view/subwayLineScreen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -24,20 +24,22 @@ class Tabbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // 탭 개수
+      length: 4, // 탭 개수 추가
       child: Scaffold(
         body: TabBarView(
           children: [
             SubwayLineScreen(),
             Star(),
             PersonProgressPage(),
+            NewsHeader(), // 뉴스헤더추가
           ],
         ),
         bottomNavigationBar: TabBar(
           tabs: [
             Tab(icon: Icon(Icons.home), text: "홈"),
             Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
-            Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
+            Tab(icon: Icon(Icons.drafts), text: "하나추가"),
+            Tab(icon: Icon(Icons.newspaper), text: "뉴스"), // 뉴스탭추가
           ],
           labelColor: Colors.deepPurple,
           unselectedLabelColor: Colors.grey,

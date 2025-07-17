@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'news_content.dart';
@@ -149,10 +148,17 @@ class _HomePageState extends State<NewsHeader> {
                       final item = headlines[index];
                       return GestureDetector(
                         onTap: () {
-                          Get.to(() => NewsContentPage(
+                          Navigator.push(context, 
+                          MaterialPageRoute(
+                          builder: (context) => NewsContentPage(
                             title: item['title'] ?? "",
                             content: item['content'] ?? "",
-                          ));
+                            )));
+
+                          // Get.to(() => NewsContentPage(
+                          //   title: item['title'] ?? "",
+                          //   content: item['content'] ?? "",
+                          // ));
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(vertical: 6),

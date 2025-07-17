@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
+
 
 class NewsContentPage extends StatelessWidget {
   final String title;
@@ -28,15 +30,23 @@ class NewsContentPage extends StatelessWidget {
       appBar: AppBar(title: Text(title)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-          onTap: () => _launchURL(content),
-          child: Text(
-            content,
-            style: const TextStyle(
-              color: Colors.blue,
-              decoration: TextDecoration.underline,
+        
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () => _launchURL(content),
+              child: Text(
+                content,
+                style: const TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
-          ),
+            LinkPreview(  onLinkPreviewDataFetched: (_) {},
+              text: content)
+          ],
+        
         ),
       ),
     );
