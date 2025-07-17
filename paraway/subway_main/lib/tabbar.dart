@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:subway_main/vm/PersonProgressProvider.dart';
 import 'package:subway_main/vm/favoriteProvider.dart';
 import 'package:subway_main/vm/handler_temp.dart';
+import 'package:subway_main/vm/news_handler.dart';
 import 'package:subway_main/vm/predict_handler.dart';
 import 'package:subway_main/vm/tabbar_controller.dart';
 
