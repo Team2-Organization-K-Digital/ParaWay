@@ -21,6 +21,10 @@ import 'package:subway_main/model/user_favorite.dart';
 // --------------------------------------------------------------------- //
 */
 class DatabaseHandler {
+// ------------------------------------- //  
+// 초기 데이터 삽입 여부
+  int check = 0;
+// ------------------------------------- //
   Future<Database> initializeDB() async{
     String path = await getDatabasesPath();
     return openDatabase(
@@ -28,12 +32,37 @@ class DatabaseHandler {
       onCreate: (db, version) async{
 // 지하철 역 정보 테이블
         await db.execute(
-          "create table sub_info(sub_name TEXT, sub_number INTEGER, store_count INTEGER, sub_gate INTEGER, office_worker INTEGER)"
+          "create table sub_info(sub_name TEXT, sub_number INTEGER, sub_gate INTEGER, store_count INTEGER, office_worker INTEGER)"
         );
 // 사용자 즐겨찾기 테이블
         await db.execute(
-          "create table user_favorite(seq INTEGER AUTOINCREMENT, sub_name TEXT, time TEXT)"
+          "create table user_favorite(seq INTEGER PRIMARY KEY AUTOINCREMENT, sub_name TEXT, time TEXT)"
         );
+// ------------------------------------- //
+// 초기 데이터 삽입 여부 판별에 따라 데이터 삽입 : 0 = 삽입 전 / 1 = 삽입 후
+        if (check == 0){
+// 초기 데이터 리스트 준비
+          final initialData = [
+            {'sub_name' : '강남', 'sub_number' : 222, 'sub_gate' :12, 'store_count' : 18334, 'office_worker' : 83897},
+            {'sub_name' : '교대', 'sub_number' : 223, 'sub_gate' :8, 'store_count' : 17394, 'office_worker' : 49584},
+            {'sub_name' : '방배', 'sub_number' : 225, 'sub_gate' :6, 'store_count' : 2141, 'office_worker' : 19769},
+            {'sub_name' : '사당', 'sub_number' : 226, 'sub_gate' :14, 'store_count' : 5316, 'office_worker' : 5628},
+            {'sub_name' : '삼성', 'sub_number' : 219, 'sub_gate' :8, 'store_count' : 7070, 'office_worker' : 130305},
+            {'sub_name' : '서초', 'sub_number' : 224, 'sub_gate' :7, 'store_count' : 9873, 'office_worker' : 31050},
+            {'sub_name' : '선릉', 'sub_number' : 220, 'sub_gate' :10, 'store_count' : 21349, 'office_worker' : 91665},
+            {'sub_name' : '역삼', 'sub_number' : 221, 'sub_gate' :8, 'store_count' : 15071, 'office_worker' : 108813},
+            {'sub_name' : '잠실', 'sub_number' : 216, 'sub_gate' :16, 'store_count' : 4381, 'office_worker' : 29308},
+            {'sub_name' : '잠실나루', 'sub_number' : 215, 'sub_gate' :5, 'store_count' : 2244, 'office_worker' : 16740},
+            {'sub_name' : '잠실새내', 'sub_number' : 217, 'sub_gate' :7, 'store_count' : 2758, 'office_worker' : 16519},
+            {'sub_name' : '종합운동장', 'sub_number' : 218, 'sub_gate' :6, 'store_count' : 4938, 'office_worker' : 86705},
+          ];
+// 초기 데이터 삽입
+          for (var row in initialData) {
+          await db.insert('sub_info', row);
+          }
+          check = 1;
+        }
+// ------------------------------------- //
       },
       version: 1,
     );
