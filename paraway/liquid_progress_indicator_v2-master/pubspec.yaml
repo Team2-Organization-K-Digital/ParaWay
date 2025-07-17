@@ -1,0 +1,18 @@
+name: liquid_progress_indicator_v2
+description: Based on https://pub.dev/packages/liquid_progress_indicator to fix a issue after Flutter 3.10 A progress indicator with water-like effect in Flutter. Works similarly to Flutters own ProgressIndicator.
+version: 0.5.0
+homepage: "https://github.com/Scintillam/liquid_progress_indicator_v2"
+
+environment:
+  #sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
