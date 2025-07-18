@@ -6,6 +6,11 @@ import joblib
 from pydantic import BaseModel
 import warnings
 warnings.filterwarnings('ignore')
+# 시각화
+import matplotlib.pyplot as plt
+import io
+import base64
+from fastapi.responses import HTMLResponse
 # --------------------------------------------------------------------- #
 '''
 - title         : Predict chart
@@ -14,7 +19,8 @@ warnings.filterwarnings('ignore')
 - Author        : Lee ChangJun
 - Created Date  : 2025.07.17
 - Last Modified : 2025.07.17
-- package       : fastapi, os, numpy, joblib, pydantic, warnings
+- package       : fastapi, os, numpy, joblib, pydantic, 
+-                 warnings, matplotlib, io, base64
 '''
 # --------------------------------------------------------------------- #
 router = APIRouter()
@@ -37,9 +43,30 @@ model_conf_w = joblib.load(os.path.join(MODEL_DIR,'subway_work_confusion.h5'))  
 # c_n =['요일구분', '역번호',  '상하구분', '시간', '승차인원', '하차인원']
 # c_w =['역번호', '상하구분', '시간', '승차인원', '하차인원', '출근시간','퇴근시간']
 # --------------------------------------------------------------------- #
-# 1. 지하철 역의 혼잡도와 승,하차 인원수를 예측하는 머신러닝 모델이 들어간 함수
+# 1. 전달 받은 데이터를 통해 내,외선 예측 혼잡도를 06시~00시 까지 line chart 로 시각화 하여 전달하는 함수
+@router.get('detail/pred_chart')
+def pred_chart(sub_num:int, week:int , stores:int, exits:int, workp:int, holy:bool):
+    time_range = range(6,23+1,1)  # 06~23시
+    ocon_list = []
+    fcon_list = []
+    for time in time_range:
+        res = pred(
+                sub_num=sub_num,
+                time=time,
+                week=week,
+                stores=stores,
+                exits=exits,
+                workp=workp,
+                holy=holy
+            )
+        ocon_list.append(res['oconfusion'])
+        fcon_list.append(res['fconfusion'])
+    return {'results' : {'str_confusion' : ocon_list, 'rev_confusion' : fcon_list}}
+
+
+# --------------------------------------------------------------------- #
+# 2. 지하철 역의 혼잡도와 승,하차 인원수를 예측하는 머신러닝 모델이 들어간 함수
 # 조건 : 역, 시간, 요일, 점포 수, 출구 수, 직장인 수, 공휴일 유무
-@router.get('detail/pred')
 def pred(sub_num:int, time:int, week:int , stores:int, exits:int, workp:int, holy:bool ):
 # ------------------------------- #
 # 머신러닝 모델에 들어갈 데이터 셋
@@ -113,5 +140,5 @@ def pred(sub_num:int, time:int, week:int , stores:int, exits:int, workp:int, hol
     fconfusion = model_c.predict([c_a])
     c_a[state+1] = 1
     oconfusion = model_c.predict([c_a])
-    return {'on':int(opeople),'off':int(fpeople),'oconfusion':round(float((oconfusion)),2),'fconfusion':round(float((fconfusion)),2)}
+    return {'oconfusion':round(float((oconfusion)),2),'fconfusion':round(float((fconfusion)),2)}
 # --------------------------------------------------------------------- #
