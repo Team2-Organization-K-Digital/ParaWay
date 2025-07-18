@@ -18,6 +18,7 @@ class PersonProgressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<PersonProgressProvider>(context);
     final pred = context.read<PredictHandler>().pred;
+    final DateTime now = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(
@@ -210,8 +211,33 @@ class PersonProgressPage extends StatelessWidget {
                   ),
                 ],
               ),
+              ElevatedButton(
+                onPressed: () {
+                  picker.DatePicker.showDateTimePicker(
+                    context,
+                    showTitleActions: true,
+                    minTime: DateTime(now.year, now.month, now.day, 6, 0),
+                    maxTime: DateTime(2025, 12, 31, 23, 0),
+                    currentTime: DateTime.now(),
+                    locale: picker.LocaleType.ko,
+                    onConfirm: (dateTime) {
+                      provider.setDateTime(dateTime);
+                    },
+                  );
+                },
+                child: Text("날짜 & 시간 선택"),
+              ),
             ],
           ),
+          SizedBox(height: 30, child: Text('6시 ~ 23시 (1시간 단위)')),
+          provider.selectedDateTime != null
+              ? Text(
+                '선택된 날짜: ${provider.selectedDateTime!.year}-${provider.selectedDateTime!.month.toString().padLeft(2, '0')}-${provider.selectedDateTime!.day.toString().padLeft(2, '0')} '
+                '${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}',
+                style: TextStyle(fontSize: 16),
+              )
+              : Text('날짜와 시간을 선택해주세요.'),
+          SizedBox(height: 30),
           SizedBox(height: 18),
           Row(
             children: [
