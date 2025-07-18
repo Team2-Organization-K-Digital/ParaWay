@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:subway_main/view/PersonProgressPage.dart';
+import 'package:subway_main/vm/PersonProgressProvider.dart';
 import 'package:subway_main/vm/favoriteProvider.dart';
 import 'package:subway_main/model/user_favorite.dart';
 
@@ -17,8 +18,11 @@ class Star extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('즐겨찾기', style: TextStyle(fontWeight: FontWeight.bold),), backgroundColor: Colors.white,),
-      backgroundColor: Colors.white, 
+      appBar: AppBar(
+        title: Text('즐겨찾기', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.white,
+      ),
+      backgroundColor: Colors.white,
       body:
           provider.favorites.isEmpty
               ? Center(child: Text('즐겨찾기가 없습니다.'))
@@ -38,6 +42,16 @@ class Star extends StatelessWidget {
                           ),
                     ),
                     onTap: () {
+                      DateTime now = DateTime.now();
+                      context
+                          .read<PersonProgressProvider>()
+                          .selectedDateTime = DateTime(
+                        now.year,
+                        now.month,
+                        now.day,
+                        int.parse(item.time.split(':')[0]), // 시(hour)
+                        int.parse(item.time.split(':')[1]), // 분(minute)
+                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
