@@ -41,14 +41,31 @@ class PersonProgressPage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        title: Text('즐겨찾기 추가', style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold)),
-                        content: Text('$stationName역을 즐겨찾기에 추가하시겠습니까?', style: TextStyle(fontSize: 17),),
+                        title: Text(
+                          '즐겨찾기 추가',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        content: Text(
+                          '$stationName역을 즐겨찾기에 추가하시겠습니까?',
+                          style: TextStyle(fontSize: 17),
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context), // 취소
-                            child: Text('아니요', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                            child: Text(
+                              '아니요',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                          SizedBox(width: 120,),
+                          SizedBox(width: 120),
                           TextButton(
                             onPressed: () {
                               final favorite = UserFavorite(
@@ -67,7 +84,14 @@ class PersonProgressPage extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: Text('예', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                            child: Text(
+                              '예',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -137,10 +161,18 @@ class PersonProgressPage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      DateTime now = DateTime.now();
+
                       picker.DatePicker.showDateTimePicker(
                         context,
                         showTitleActions: true,
-                        minTime: DateTime.now(),
+                        minTime: DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          6, // 시(hour)
+                          00, // 분(minute)
+                        ),
                         maxTime: DateTime(2025, 12, 31, 23, 0),
                         currentTime: DateTime.now(),
                         locale: picker.LocaleType.ko,
@@ -254,7 +286,7 @@ class PersonProgressPage extends StatelessWidget {
                                 pred['fconfusion'] < 80
                                     ? Colors.green
                                     : pred['fconfusion'] < 120
-                                    ? Colors.amber 
+                                    ? Colors.amber
                                     : Colors.red,
                               )
                               : AlwaysStoppedAnimation(
@@ -263,7 +295,7 @@ class PersonProgressPage extends StatelessWidget {
                                     : pred['oconfusion'] < 120
                                     ? Colors.amber
                                     : Colors.red,
-                              ), 
+                              ),
                       shapePath: provider.svgShapePath!,
                       center: Text(
                         provider.out == true
@@ -295,28 +327,27 @@ class PersonProgressPage extends StatelessWidget {
                         '${pred['oconfusion']}%',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          
+
                           fontSize: 25,
                         ),
                       ),
-          SizedBox(height: 15),
-          Text( 
-            '승차인원 : ${pred['on']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-          ),
-          SizedBox(height: 15),
-          Text(
-            '하차인원 : ${pred['off']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-          ),
-          // SizedBox(width: 50,) 
+                  SizedBox(height: 15),
+                  Text(
+                    '승차인원 : ${pred['on']}',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    '하차인원 : ${pred['off']}',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                  ),
+                  // SizedBox(width: 50,)
                 ],
               ),
             ],
           ),
         ],
       ),
-      
     );
   }
 }
