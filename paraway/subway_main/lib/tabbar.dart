@@ -77,7 +77,7 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
         child: TabBar(
           controller: tabProvider.tabController,
           tabs: [
-            Tab(icon: Icon(Icons.home), text: "홈"),
+            Tab(icon: Icon(Icons.home) , text: "홈"),
             Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
             Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
           ],

@@ -89,8 +89,9 @@ class SubwayLineScreen extends StatelessWidget {
                             context: context,
                             builder:
                                 (context) => Dialog(
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(20),
@@ -98,7 +99,7 @@ class SubwayLineScreen extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          stations[index],
+                                          '${stations[index]}역',
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -107,21 +108,23 @@ class SubwayLineScreen extends StatelessWidget {
                                         SizedBox(height: 16),
                                         Text(
                                           "내선 혼잡도 : ${pred['oconfusion'] < 80
-                                              ? '여유'
+                                              ? '여유 🟢'
                                               : pred['oconfusion'] < 130
-                                              ? '보통'
+                                              ? '보통 🟡'
                                               : pred['oconfusion'] < 150
-                                              ? '주의'
-                                              : '혼잡'}",
+                                              ? '주의 🟠'
+                                              : '혼잡 🔴'}",
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                         ),
                                         Text(
                                           "외선 혼잡도 : ${pred['fconfusion'] < 80
-                                              ? '여유'
+                                              ? '여유 🟢'
                                               : pred['fconfusion'] < 130
-                                              ? '보통'
+                                              ? '보통 🟡'
                                               : pred['fconfusion'] < 150
-                                              ? '주의'
-                                              : '혼잡'}",
+                                              ? '주의 🟠'
+                                              : '혼잡 🔴'}",
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                         ),
                                         SizedBox(height: 24),
                                         Row(
@@ -131,7 +134,7 @@ class SubwayLineScreen extends StatelessWidget {
                                             TextButton(
                                               onPressed:
                                                   () => Navigator.pop(context),
-                                              child: Text("닫기"),
+                                              child: Text("닫기", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
                                             ),
                                             SizedBox(width: 8),
                                             TextButton(
@@ -159,7 +162,7 @@ class SubwayLineScreen extends StatelessWidget {
                                                   ),
                                                 );
                                               },
-                                              child: Text("상세보기"),
+                                              child: Text("상세보기", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
                                             ),
                                           ],
                                         ),

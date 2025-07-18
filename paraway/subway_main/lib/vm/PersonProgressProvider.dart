@@ -69,8 +69,8 @@ class PersonProgressProvider with ChangeNotifier {
       ];
       final Matrix4 transformMatrix =
           Matrix4.identity()
-            ..translate(0.0, 300.0)
-            ..scale(0.4, -0.4);
+            ..translate(0.0, 280.0)
+            ..scale(0.35, -0.35);
 
       for (final d in svgPathDs) {
         final Path currentPath = parseSvgPathData(d);

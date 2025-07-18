@@ -13,7 +13,8 @@ class NewsHeader extends StatelessWidget {
     final headlines = handler.headlines;
 
     return Scaffold(
-      appBar: AppBar(title: Text("뉴스와 날씨")),
+      appBar: AppBar(title: Text("뉴스와 날씨", style: TextStyle(fontWeight: FontWeight.bold),), backgroundColor: Colors.white,),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [

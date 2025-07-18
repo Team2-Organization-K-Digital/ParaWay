@@ -27,78 +27,143 @@ class PersonProgressPage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.star_border, size: 30),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder:
-                    (context) => AlertDialog(
-                      title: Text('즐겨찾기 추가'),
-                      content: Text('$stationName역을 즐겨찾기에 추가하시겠습니까?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context), // 취소
-                          child: Text('아니요'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+            child: IconButton(
+              icon: Icon(Icons.star_border, size: 30),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            final favorite = UserFavorite(
-                              name: stationName,
-                              time:
-                                  "${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}",
-                            );
-                            context.read<FavoriteProvider>().addFavorite(
-                              favorite,
-                            );
-                            Navigator.pop(context); // 다이얼로그 닫기
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('즐겨찾기에 추가되었습니다'),
-                                duration: Duration(seconds: 1),
-                              ),
-                            );
-                          },
-                          child: Text('예'),
-                        ),
-                      ],
-                    ),
-              );
-            },
+                        title: Text('즐겨찾기 추가', style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold)),
+                        content: Text('$stationName역을 즐겨찾기에 추가하시겠습니까?', style: TextStyle(fontSize: 17),),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context), // 취소
+                            child: Text('아니요', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
+                          SizedBox(width: 120,),
+                          TextButton(
+                            onPressed: () {
+                              final favorite = UserFavorite(
+                                name: stationName,
+                                time:
+                                    "${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}",
+                              );
+                              context.read<FavoriteProvider>().addFavorite(
+                                favorite,
+                              );
+                              Navigator.pop(context); // 다이얼로그 닫기
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('즐겨찾기에 추가되었습니다'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            },
+                            child: Text('예', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                );
+              },
+            ),
           ),
-          SizedBox(width: 5),
         ],
       ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          SizedBox(height: 8),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  SizedBox(width: 58),
                   Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: Colors.black,
                     value: provider.isHoliday,
                     onChanged: (val) => provider.setHoliday(val ?? false),
                   ),
-                  Text('공휴일'),
+                  Text(
+                    '공휴일',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(width: 15),
                   Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: Colors.black,
                     value: provider.up,
                     onChanged: (val) {
                       provider.setUp(val ?? false);
                       provider.simulateProgress();
                     },
                   ),
-                  Text('내선'),
+                  Text(
+                    '내선',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(width: 15),
                   Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: Colors.black,
                     value: provider.out,
                     onChanged: (val) {
                       provider.setOut(val ?? false);
                       provider.simulateProgress();
                     },
                   ),
-                  Text('외선'),
+                  Text(
+                    '외선',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                child: Divider(height: 2, thickness: 2),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      picker.DatePicker.showDateTimePicker(
+                        context,
+                        showTitleActions: true,
+                        minTime: DateTime.now(),
+                        maxTime: DateTime(2025, 12, 31, 23, 0),
+                        currentTime: DateTime.now(),
+                        locale: picker.LocaleType.ko,
+                        onConfirm: (dateTime) {
+                          provider.setDateTime(dateTime);
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black, // 버튼 배경색
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4, // 글자색
+                    ),
+                    child: Text(
+                      "날짜 / 시간 선택",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       final info =
@@ -127,88 +192,90 @@ class PersonProgressPage extends StatelessWidget {
                       provider.setPredData(pred);
                       provider.simulateProgress();
                     },
-                    child: Text('조회'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black, // 버튼 배경색
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4, // 글자색
+                    ),
+                    child: Text(
+                      '조회',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  picker.DatePicker.showDateTimePicker(
-                    context,
-                    showTitleActions: true,
-                    minTime: DateTime.now(),
-                    maxTime: DateTime(2025, 12, 31, 23, 0),
-                    currentTime: DateTime.now(),
-                    locale: picker.LocaleType.ko,
-                    onConfirm: (dateTime) {
-                      provider.setDateTime(dateTime);
-                    },
-                  );
-                },
-                child: Text("날짜 & 시간 선택"),
-              ),
             ],
           ),
-          SizedBox(height: 30, child: Text('5시 ~ 23시')),
-          provider.selectedDateTime != null
-              ? Text(
-                '선택된 날짜: ${provider.selectedDateTime!.year}-${provider.selectedDateTime!.month.toString().padLeft(2, '0')}-${provider.selectedDateTime!.day.toString().padLeft(2, '0')} '
-                '${provider.selectedDateTime!.hour.toString().padLeft(2, '0')}:${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}',
-                style: TextStyle(fontSize: 16),
-              )
-              : Text('날짜와 시간을 선택해주세요.'),
-          SizedBox(height: 30),
+          SizedBox(height: 18),
           Row(
             children: [
-              Text('승차인원 : ${pred['on']}'),
+              SizedBox(width: 30),
+              Icon(Icons.calendar_month_sharp),
+              provider.selectedDateTime != null
+                  ? Text(
+                    '  ${provider.selectedDateTime!.month.toString().padLeft(2, '0')}월 ${provider.selectedDateTime!.day.toString().padLeft(2, '0')}일 \t'
+                    '${provider.selectedDateTime!.hour.toString().padLeft(2, '0')} : ${provider.selectedDateTime!.minute.toString().padLeft(2, '0')}',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  )
+                  : Text(
+                    '날짜와 시간을 선택해주세요.',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
               SizedBox(width: 20),
-              Text('하차인원 : ${pred['off']}'),
+              SizedBox(
+                child: Text(
+                  '( 선택 가능 시간 : 6시 - 23시 )',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
-          SizedBox(height: 30),
           Row(
             children: [
-              Center(
-                child:
-                    provider.svgShapePath == null
-                        ? CircularProgressIndicator()
-                        : SizedBox(
-                          width: 250,
-                          height: 300,
-                          child: LiquidCustomProgressIndicator(
-                            value: pred['oconfusion'],
-                            direction: Axis.vertical,
-                            backgroundColor: Colors.grey[200],
-                            valueColor:
-                                provider.out == true
-                                    ? AlwaysStoppedAnimation(
-                                      pred['fconfusion'] <= 80
-                                          ? Colors.green
-                                          : pred['fconfusion'] <= 120
-                                          ? Colors.amber
-                                          : Colors.red,
-                                    )
-                                    : AlwaysStoppedAnimation(
-                                      pred['oconfusion'] <= 80
-                                          ? Colors.green
-                                          : pred['oconfusion'] <= 120
-                                          ? Colors.amber
-                                          : Colors.red,
-                                    ),
-                            shapePath: provider.svgShapePath!,
-                            center: Text(
-                              provider.out == true
-                                  ? "${(pred['fconfusion']).toDouble()}%"
-                                  : "${(pred['oconfusion']).toDouble()}%",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+              provider.svgShapePath == null
+                  ? CircularProgressIndicator()
+                  : SizedBox(
+                    width: 220,
+                    height: 300,
+                    child: LiquidCustomProgressIndicator(
+                      value: pred['oconfusion'],
+                      direction: Axis.vertical,
+                      backgroundColor: Colors.grey[200],
+                      valueColor:
+                          provider.out == true
+                              ? AlwaysStoppedAnimation(
+                                pred['fconfusion'] <= 80
+                                    ? Colors.green
+                                    : pred['fconfusion'] <= 120
+                                    ? Colors.amber 
+                                    : Colors.red,
+                              )
+                              : AlwaysStoppedAnimation(
+                                pred['oconfusion'] <= 80
+                                    ? Colors.green
+                                    : pred['oconfusion'] <= 120
+                                    ? Colors.amber
+                                    : Colors.red,
+                              ), 
+                      shapePath: provider.svgShapePath!,
+                      center: Text(
+                        provider.out == true
+                            ? "${(pred['fconfusion']).toDouble()}%"
+                            : "${(pred['oconfusion']).toDouble()}%",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-              ),
+                      ),
+                    ),
+                  ),
               Column(
                 children: [
                   Text(
@@ -219,23 +286,36 @@ class PersonProgressPage extends StatelessWidget {
                       ? Text(
                         '${pred['fconfusion']}%',
                         style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
                         ),
                       )
                       : Text(
                         '${pred['oconfusion']}%',
                         style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          
+                          fontSize: 25,
                         ),
                       ),
+          SizedBox(height: 15),
+          Text( 
+            '승차인원 : ${pred['on']}',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+          ),
+          SizedBox(height: 15),
+          Text(
+            '하차인원 : ${pred['off']}',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+          ),
+          // SizedBox(width: 50,) 
                 ],
               ),
             ],
           ),
         ],
       ),
+      
     );
   }
 }
