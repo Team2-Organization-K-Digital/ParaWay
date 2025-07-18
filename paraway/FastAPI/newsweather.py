@@ -23,7 +23,7 @@ def get_news():
         options=chrome_options
     )
     driver.get("https://www.koti.re.kr/user/bbs/trfcNewsList.do")
-    time.sleep(5)  # 페이지 로딩 대기
+    time.sleep(1)  # 페이지 로딩 대기
 
     headlines = []
     for i in range(1, 11):
@@ -46,7 +46,7 @@ def get_newscontent():
         options=chrome_options
     )
     driver.get("https://www.koti.re.kr/user/bbs/trfcNewsList.do")
-    time.sleep(2)
+    time.sleep(1)
 
     results = []
 
@@ -87,7 +87,7 @@ def get_news():
         options=chrome_options
     )
     driver.get("https://weather.daum.net/?location-regionId=AI10000901&weather-cp=kweather")
-    time.sleep(2)  # 페이지 로딩 대기
+    time.sleep(1)  # 페이지 로딩 대기
 
     weathers = []
 

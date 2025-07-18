@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:subway_main/view/news_header.dart';
 import 'package:subway_main/view/star.dart';
@@ -48,15 +50,35 @@ class Tabbar extends StatefulWidget {
 
 class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
   late TabbarController tabProvider;
+  late bool loading;
+  int seconds = 0;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    loading = true;
     tabProvider = Provider.of<TabbarController>(context, listen: false);
     tabProvider.init(this, 3);
     Future.microtask(() {
       context.read<NewsHandler>().fetchAll(); // ✅ 빌드 이후 호출
     });
+    startTimer();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 7), (timer) {
+      loading = false;
+      seconds += 1;
+      setState(() {});
+      if (seconds >= 1) {
+        stopTimer();
+      }
+    });
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
   }
 
   @override
@@ -67,26 +89,60 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabBarView(
-        controller: tabProvider.tabController,
-        children: [SubwayLineScreen(), Star(), NewsHeader()],
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: TabBar(
-          controller: tabProvider.tabController,
-          tabs: [
-            Tab(icon: Icon(Icons.home) , text: "홈"),
-            Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
-            Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
-          ],
+    return Stack(
+      children: [
+        Scaffold(
+          body: TabBarView(
+            controller: tabProvider.tabController,
+            children: [SubwayLineScreen(), Star(), NewsHeader()],
+          ),
+          bottomNavigationBar: Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: tabProvider.tabController,
+              tabs: [
+                Tab(icon: Icon(Icons.home), text: "홈"),
+                Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
+                Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
+              ],
 
-          labelColor: Colors.green,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: Colors.green,
+              labelColor: Colors.green,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.green,
+            ),
+          ),
         ),
-      ),
+        Visibility(
+          visible: loading,
+          child: Scaffold(
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.green,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Para Way',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: 300,
+                      child: LinearProgressIndicator(color: Colors.blueGrey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
