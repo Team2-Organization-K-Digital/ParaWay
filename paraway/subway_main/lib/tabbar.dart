@@ -37,7 +37,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Tabbar(), debugShowCheckedModeBanner: false);
+    return MaterialApp(
+      title: 'ParaWay',
+      home: Tabbar(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
@@ -105,7 +109,6 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
                 Tab(icon: Icon(Icons.star), text: "즐겨찾기"),
                 Tab(icon: Icon(Icons.newspaper), text: "뉴스"),
               ],
-
               labelColor: Colors.green,
               unselectedLabelColor: Colors.grey,
               indicatorColor: Colors.green,
@@ -121,7 +124,7 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
               color: Colors.green,
               child: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       'Para Way',
@@ -131,11 +134,12 @@ class _TabbarState extends State<Tabbar> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 350),
                     SizedBox(
                       width: 300,
                       child: LinearProgressIndicator(color: Colors.blueGrey),
                     ),
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
